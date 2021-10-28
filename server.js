@@ -4,6 +4,7 @@ const ObjectId = require("mongodb").ObjectId;
 require("dotenv").config();
 const cors = require("cors");
 const port = process.env.PORT || 5000;
+// http://localhost:5000
 const app = express();
 
 app.use(cors());
@@ -81,6 +82,12 @@ async function run() {
       const uid = req.params.uid;
       const query = { uid: uid };
       const result = await cart_Collection.deleteMany(query);
+      res.json(result);
+    });
+
+    // orders get api
+    app.get("/orders", async (req, res) => {
+      const result = await cart_Collection.find({}).toArray();
       res.json(result);
     });
   } finally {
