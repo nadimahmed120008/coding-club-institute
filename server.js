@@ -5,7 +5,7 @@ require("dotenv").config();
 const cors = require("cors");
 const port = process.env.PORT || 5000;
 // http://localhost:5000
-// https://aqueous-dawn-65962.herokuapp.com
+
 // https://scary-dracula-51446.herokuapp.com
 const app = express();
 
@@ -25,34 +25,34 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
-    const database = client.db("coding_club_institute");
-    const courses_Collection = database.collection("courses");
+    const database = client.db("adven-tour");
+    const packages_Collection = database.collection("packages");
     const cart_Collection = database.collection("cart");
 
-    // load courses get api
-    app.get("/courses", async (req, res) => {
+    // load packages get api
+    app.get("/packages", async (req, res) => {
       const size = parseInt(req.query.size);
       const page = req.query.page;
-      const cursor = courses_Collection.find({});
+      const cursor = packages_Collection.find({});
       const count = await cursor.count();
-      let courses;
+      let packages;
 
       if (size && page) {
-        courses = await cursor
+        packages = await cursor
           .skip(size * page)
           .limit(size)
           .toArray();
       } else {
-        courses = await cursor.toArray();
+        packages = await cursor.toArray();
       }
-      res.json({ count, courses });
+      res.json({ count, packages });
     });
 
-    // load single course get api
-    app.get("/courses/:id", async (req, res) => {
+    // load single package get api
+    app.get("/packages/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
-      const course = await courses_Collection.findOne(query);
+      const course = await packages_Collection.findOne(query);
       res.json(course);
     });
 
@@ -65,9 +65,9 @@ async function run() {
     });
 
     // add data to cart collection with additional info
-    app.post("/course/add", async (req, res) => {
-      const course = req.body;
-      const result = await cart_Collection.insertOne(course);
+    app.post("/package/add", async (req, res) => {
+      const package = req.body;
+      const result = await cart_Collection.insertOne(package);
       res.json(result);
     });
 
