@@ -25,34 +25,34 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
-    const database = client.db("adven-tour");
-    const packages_Collection = database.collection("packages");
+    const database = client.db("coding_club_institute");
+    const courses_Collection = database.collection("courses");
     const cart_Collection = database.collection("cart");
 
-    // load packages get api
-    app.get("/packages", async (req, res) => {
+    // load courses get api
+    app.get("/courses", async (req, res) => {
       const size = parseInt(req.query.size);
       const page = req.query.page;
-      const cursor = packages_Collection.find({});
+      const cursor = courses_Collection.find({});
       const count = await cursor.count();
-      let packages;
+      let courses;
 
       if (size && page) {
-        packages = await cursor
+        courses = await cursor
           .skip(size * page)
           .limit(size)
           .toArray();
       } else {
-        packages = await cursor.toArray();
+        courses = await cursor.toArray();
       }
-      res.json({ count, packages });
+      res.json({ count, courses });
     });
 
-    // load single package get api
-    app.get("/packages/:id", async (req, res) => {
+    // load single course get api
+    app.get("/courses/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
-      const course = await packages_Collection.findOne(query);
+      const course = await courses_Collection.findOne(query);
       res.json(course);
     });
 
@@ -65,9 +65,9 @@ async function run() {
     });
 
     // add data to cart collection with additional info
-    app.post("/package/add", async (req, res) => {
-      const package = req.body;
-      const result = await cart_Collection.insertOne(package);
+    app.post("/course/add", async (req, res) => {
+      const course = req.body;
+      const result = await cart_Collection.insertOne(course);
       res.json(result);
     });
 
