@@ -5,6 +5,8 @@ require("dotenv").config();
 const cors = require("cors");
 const port = process.env.PORT || 5000;
 // http://localhost:5000
+// https://aqueous-dawn-65962.herokuapp.com
+// https://scary-dracula-51446.herokuapp.com
 const app = express();
 
 app.use(cors());
@@ -14,7 +16,7 @@ app.get("/", (req, res) => {
   res.send("server is running");
 });
 
-const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.dv4ff.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.rexnv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
